@@ -15,6 +15,8 @@ body.dark-mode {
   --bot-msg-bg: #2a2a2a;
   --user-msg-bg: #357ABD;
   --user-msg-text: #fff;
+  --water-light: #1a3a52;
+  --water-blue: #1e88e5;
 }
 
 body {
