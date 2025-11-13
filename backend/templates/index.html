@@ -3,22 +3,87 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Chatbot</title>
+  <title>💧 Water Conservation Assistant</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
   <div class="chat-container">
     <div class="chat-header">
-      <span>🤖 My Chatbot</span>
-      <button id="mode-toggle" onclick="toggleDarkMode()">🌙</button>
+      <span>💧 Your Water Conservation Assistant</span>
+      <div class="header-controls">
+        <button id="clear-chat" onclick="clearChat()" title="Start fresh">🔄</button>
+        <button id="mode-toggle" onclick="toggleDarkMode()">🌙</button>
+      </div>
+    </div>
+
+    <!-- Conversation Starters -->
+    <div id="conversation-starters" class="conversation-starters">
+      <p class="starters-title">💬 How can I help you today?</p>
+      <div class="starters-grid">
+        <button class="starter-btn" onclick="useStarter('How can I save water in my bathroom?')">
+          🚽 Save water in bathroom
+        </button>
+        <button class="starter-btn" onclick="useStarter('Calculate my water usage')">
+          🧮 Calculate my usage
+        </button>
+        <button class="starter-btn" onclick="useStarter('Best ways to save water in kitchen?')">
+          🍳 Kitchen water tips
+        </button>
+        <button class="starter-btn" onclick="useStarter('How do I fix a leaky faucet?')">
+          🔧 Fix leaky faucet
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Action Buttons (hidden initially) -->
+    <div id="quick-actions" class="quick-actions" style="display: none;">
+      <button class="quick-btn" onclick="quickAction('kitchen')">🍳 Kitchen</button>
+      <button class="quick-btn" onclick="quickAction('bathroom')">🚽 Bathroom</button>
+      <button class="quick-btn" onclick="quickAction('garden')">🌱 Garden</button>
+      <button class="quick-btn" onclick="quickAction('leaks')">💧 Leaks</button>
+      <button class="quick-btn" onclick="quickAction('calculate')">🧮 Calculate</button>
     </div>
 
     <div id="chat-box"></div>
 
     <div class="input-container">
-      <input type="text" id="user-input" placeholder="Type a message..." />
+      <input type="text" id="user-input" placeholder="Ask me anything about water conservation..." />
       <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <!-- Water Calculator Modal -->
+  <div id="calculator-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>💧 Water Usage Calculator</h3>
+        <button class="close-btn" onclick="closeCalculator()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="calc-group">
+          <label>🚿 Showers per day:</label>
+          <input type="number" id="showers" value="2" min="0" max="10">
+        </div>
+        <div class="calc-group">
+          <label>⏱️ Average shower time (minutes):</label>
+          <input type="number" id="shower_time" value="10" min="1" max="60">
+        </div>
+        <div class="calc-group">
+          <label>🚽 Toilet flushes per day:</label>
+          <input type="number" id="toilet_flushes" value="6" min="0" max="20">
+        </div>
+        <div class="calc-group">
+          <label>🚰 Faucet use (minutes):</label>
+          <input type="number" id="faucet_use" value="5" min="0" max="60">
+        </div>
+        <div class="calc-group">
+          <label>🧺 Laundry loads per day:</label>
+          <input type="number" id="laundry" value="1" min="0" max="5">
+        </div>
+        <button class="calculate-btn" onclick="calculateUsage()">Calculate Usage</button>
+        <div id="calc-results" class="calc-results" style="display: none;"></div>
+      </div>
     </div>
   </div>
 
