@@ -133,24 +133,143 @@ def home():
 @app.route("/chat", methods=["POST"])
 def chat():
     user_message = request.json.get("message", "")
+    session_id = request.json.get("session_id", None)
     print("USER MSG RECEIVED:", user_message)  # Debug log
 
     if not user_message:
-        return jsonify({"reply": "You sent an empty message!"})
+        return jsonify({"reply": "Hey there! Feel free to ask me anything about water conservation. I'm here to help!"})
 
     try:
-        response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
-            messages=[{"role": "user", "content": user_message}]
-        )
+        # Get or create session
+        session_id, session_data = get_session(session_id)
 
-        bot_reply = response.choices[0].message.content
+        # Check if this is a water calculation request
+        if is_water_calculation_request(user_message):
+            calculation_result = calculate_usage()
+            bot_reply = f"I'd be happy to help calculate your water usage! Based on average household usage, here's what I found:\n\n💧 **Daily Usage**: {calculation_result} liters\n\nThis is just an estimate though. Want to dive deeper into any specific area? I can help you understand where you might be using the most water and how to reduce it!"
+        else:
+            # Build conversation context with personality and knowledge base
+            context_messages = build_conversation_context(session_data, user_message)
+
+            # Generate AI response with full context
+            response = client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=context_messages
+            )
+
+            bot_reply = response.choices[0].message.content
+
+        # Store message in session history
+        session_data['messages'].append({
+            'role': 'user',
+            'content': user_message,
+            'timestamp': datetime.now().isoformat()
+        })
+        session_data['messages'].append({
+            'role': 'assistant',
+            'content': bot_reply,
+            'timestamp': datetime.now().isoformat()
+        })
+
         print("BOT REPLY:", bot_reply)  # Debug log
-        return jsonify({"reply": bot_reply})
+        return jsonify({
+            "reply": bot_reply,
+            "session_id": session_id
+        })
 
     except Exception as e:
         print("ERROR:", str(e))
-        return jsonify({"reply": f"Error generating response: {str(e)}"})
+
+        # Enhanced error handling with friendly fallback messages
+        if "rate" in str(e).lower():
+            fallback_msg = "Whoa! You're chatting up a storm! Give me just a moment to catch up with your questions. 😊"
+        elif "timeout" in str(e).lower():
+            fallback_msg = "Hmm, I'm having a bit of trouble connecting right now. Could you try that again in a second?"
+        elif "connection" in str(e).lower():
+            fallback_msg = "I'm having some network issues, but I'm still here to help! Could you rephrase that and try again?"
+        else:
+            fallback_msg = "I seem to be having a technical hiccup, but I'd love to help you with water conservation! Try asking me about saving water in your kitchen, bathroom, or garden."
+
+        return jsonify({
+            "reply": fallback_msg,
+            "session_id": session_id or str(uuid.uuid4())
+        })
+
+@app.route("/calculate", methods=["POST"])
+def calculate():
+    """Enhanced water calculation endpoint"""
+    try:
+        data = request.json.get("data", {})
+        session_id = request.json.get("session_id", None)
+
+        # Get session for context
+        if session_id:
+            _, session_data = get_session(session_id)
+        else:
+            session_data = {'messages': []}
+
+        # Extract calculation parameters
+        showers = data.get("showers", 2)  # Default: 2 showers
+        shower_time = data.get("shower_time", 10)  # Default: 10 minutes
+        toilet_flushes = data.get("toilet_flushes", 6)  # Default: 6 flushes
+        faucet_use = data.get("faucet_use", 5)  # Default: 5 minutes
+        laundry = data.get("laundry", 1)  # Default: 1 load
+
+        # Calculate usage (rough estimates in liters)
+        shower_usage = showers * shower_time * 12  # ~12 liters per minute
+        toilet_usage = toilet_flushes * 6  # ~6 liters per flush
+        faucet_usage = faucet_use * 8  # ~8 liters per minute
+        laundry_usage = laundry * 75  # ~75 liters per load
+
+        total_daily = shower_usage + toilet_usage + faucet_usage + laundry_usage
+        total_monthly = total_daily * 30
+        total_yearly = total_daily * 365
+
+        response_data = {
+            "daily": round(total_daily, 1),
+            "monthly": round(total_monthly, 1),
+            "yearly": round(total_yearly, 1),
+            "breakdown": {
+                "showers": round(shower_usage, 1),
+                "toilet": round(toilet_usage, 1),
+                "faucet": round(faucet_usage, 1),
+                "laundry": round(laundry_usage, 1)
+            }
+        }
+
+        # Generate personalized response
+        if total_daily > 200:
+            suggestion = "That's higher than average! The biggest opportunity I see is shorter showers - cutting just 5 minutes can save ~60 liters daily!"
+        elif total_daily > 150:
+            suggestion = "You're doing okay, but there's room for improvement. Try focusing on the area with your highest usage above."
+        else:
+            suggestion = "Great job! You're using water efficiently. Want to explore even more ways to save?"
+
+        return jsonify({
+            "data": response_data,
+            "suggestion": suggestion,
+            "reply": f"Here's your water usage breakdown:\n\n💧 **Daily**: {response_data['daily']} liters\n📅 **Monthly**: {response_data['monthly']} liters\n📊 **Yearly**: {response_data['yearly']} liters\n\n{suggestion}\n\nWant tips on reducing your highest usage area?"
+        })
+
+    except Exception as e:
+        print("CALCULATION ERROR:", str(e))
+        return jsonify({
+            "reply": "I had trouble calculating that. Let's try a simpler approach - I can give you general tips for saving water in your home!",
+            "data": None
+        })
+
+@app.route("/clear_session", methods=["POST"])
+def clear_session():
+    """Clear session history for a fresh start"""
+    session_id = request.json.get("session_id")
+    if session_id and session_id in sessions:
+        del sessions[session_id]
+
+    new_session_id, _ = get_session()
+    return jsonify({
+        "session_id": new_session_id,
+        "reply": "Great! Let's start fresh. What water conservation topic can I help you with today?"
+    })
 
 if __name__ == "__main__":
     app.run(debug=True)
