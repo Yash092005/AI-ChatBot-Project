@@ -111,12 +111,16 @@ function useStarter(starterText) {
 }
 
 function quickAction(topic) {
+  if (topic === 'calculate') {
+    openCalculator();
+    return;
+  }
+
   const topicMessages = {
     'kitchen': "What are the best ways to save water in the kitchen?",
     'bathroom': "How can I reduce water usage in my bathroom?",
     'garden': "What are some water-saving tips for my garden?",
-    'leaks': "How do I detect and fix water leaks in my home?",
-    'calculate': "Can you help me calculate my household water usage?"
+    'leaks': "How do I detect and fix water leaks in my home?"
   };
 
   const message = topicMessages[topic] || `Tell me about ${topic} water conservation`;
