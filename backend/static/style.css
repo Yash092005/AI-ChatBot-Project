@@ -4,6 +4,9 @@
   --bot-msg-bg: #e1e1e1;
   --user-msg-bg: #4a90e2;
   --user-msg-text: #fff;
+  --water-blue: #0077be;
+  --water-light: #e3f2fd;
+  --water-dark: #005a8b;
 }
 
 body.dark-mode {
