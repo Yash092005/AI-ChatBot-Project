@@ -58,7 +58,7 @@ Example response style:
 2️⃣ Fix those drips - Even small leaks waste gallons daily!
 3️⃣ Low-flow fixtures - They cut usage by 30-50% without you noticing
 
-Which of these interests you most? I can dive deeper into any of them!""""
+Which of these interests you most? I can dive deeper into any of them!"""
 
 def get_session(session_id=None):
     """Get or create a session for conversation history"""
