@@ -168,3 +168,319 @@ button:hover {
     opacity: 0.2;
   }
 }
+
+/* Conversation Starters */
+.conversation-starters {
+  padding: 15px;
+  background: var(--water-light);
+  border-bottom: 1px solid rgba(0, 119, 190, 0.1);
+  border-top: 1px solid rgba(0, 119, 190, 0.1);
+}
+
+.starters-title {
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  color: var(--water-dark);
+  font-size: 14px;
+}
+
+.starters-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.starter-btn {
+  padding: 10px 12px;
+  border: none;
+  border-radius: 12px;
+  background: white;
+  color: var(--water-dark);
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  box-shadow: 0 2px 4px rgba(0, 119, 190, 0.1);
+}
+
+.starter-btn:hover {
+  background: var(--water-blue);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 119, 190, 0.2);
+}
+
+/* Quick Actions */
+.quick-actions {
+  padding: 10px 15px;
+  background: var(--bg-color);
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.quick-btn {
+  padding: 8px 12px;
+  border: 1px solid var(--water-blue);
+  border-radius: 20px;
+  background: white;
+  color: var(--water-blue);
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.quick-btn:hover {
+  background: var(--water-blue);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--bg-color);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: var(--water-blue);
+  color: white;
+  border-radius: 12px 12px 0 0;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.calc-group {
+  margin-bottom: 15px;
+}
+
+.calc-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.calc-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--bot-msg-bg);
+  color: var(--text-color);
+  outline: none;
+}
+
+.calc-group input:focus {
+  border-color: var(--water-blue);
+  box-shadow: 0 0 0 2px rgba(0, 119, 190, 0.2);
+}
+
+.calculate-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--water-blue);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 10px;
+}
+
+.calculate-btn:hover {
+  background: var(--water-dark);
+}
+
+.calc-results {
+  margin-top: 20px;
+  padding: 15px;
+  background: var(--water-light);
+  border-radius: 8px;
+  border-left: 4px solid var(--water-blue);
+}
+
+.calc-results h4 {
+  margin: 0 0 10px 0;
+  color: var(--water-dark);
+  font-size: 14px;
+}
+
+.calc-results .usage-breakdown {
+  margin: 10px 0;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+}
+
+.calc-results .usage-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+.calc-results .usage-total {
+  font-weight: bold;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 119, 190, 0.3);
+  color: var(--water-dark);
+}
+
+/* Enhanced Message Styling */
+.message.bot {
+  position: relative;
+  border-bottom-left-radius: 4px;
+}
+
+.message.user {
+  border-bottom-right-radius: 4px;
+}
+
+.message.bot::before {
+  content: "💧";
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  background: var(--bg-color);
+  padding: 2px 4px;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+/* Enhanced Typing Animation */
+.typing-messages = [
+  "💭 Thinking about water conservation...",
+  "🌊 Finding the best water tips...",
+  "💧 Calculating your water savings...",
+  "🚽 Checking bathroom water tips...",
+  "🍳 Looking up kitchen conservation ideas..."
+];
+
+.message.bot.typing::after {
+  content: " 💭";
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .starters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .quick-btn {
+    flex-shrink: 0;
+  }
+
+  .modal-content {
+    width: 95%;
+    margin: 20px;
+  }
+}
+
+/* Dark mode adjustments */
+body.dark-mode .starter-btn {
+  background: var(--bot-msg-bg);
+  color: var(--text-color);
+}
+
+body.dark-mode .starter-btn:hover {
+  background: var(--water-blue);
+  color: white;
+}
+
+body.dark-mode .quick-btn {
+  background: var(--bot-msg-bg);
+  color: var(--water-blue);
+}
+
+body.dark-mode .quick-btn:hover {
+  background: var(--water-blue);
+  color: white;
+}
+
+body.dark-mode .calc-results {
+  background: rgba(0, 119, 190, 0.1);
+}
+
+body.dark-mode .calc-results .usage-breakdown {
+  background: var(--bot-msg-bg);
+}
